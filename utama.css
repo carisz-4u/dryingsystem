@@ -1,0 +1,175 @@
+:root {
+  --neon-blue: #38bdf8;
+  --neon-red: #f43f5e;
+  --neon-green: #22c55e;
+  --bg-dark: #020617;
+  --card-bg: rgba(15, 23, 42, 0.85);
+  --border-glow: rgba(56, 189, 248, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  color: #e5e7eb;
+  background:
+    radial-gradient(circle at top, #020617 0%, #000 70%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,0.02) 0,
+      rgba(255,255,255,0.02) 2px,
+      transparent 2px,
+      transparent 6px
+    );
+  overflow-x: hidden;
+}
+
+/* =========================
+   RAIN BACKGROUND (ON/OFF)
+   ========================= */
+
+body.rain-on::before,
+body.rain-on::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.rain-on::before {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 4px,
+    rgba(255,255,255,0.12) 5px,
+    transparent 6px
+  );
+  background-size: 2px 12px;
+  animation: rain-fall 0.6s linear infinite;
+  opacity: 0.6;
+}
+
+body.rain-on::after {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 6px,
+    rgba(255,255,255,0.06) 7px,
+    transparent 8px
+  );
+  background-size: 1px 18px;
+  animation: rain-fall 1s linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes rain-fall {
+  from { background-position: 0 0; }
+  to   { background-position: 0 18px; }
+}
+
+/* =========================
+   LAYOUT
+   ========================= */
+
+header,
+.container,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  text-align: center;
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(56,189,248,0.3);
+  background: linear-gradient(
+    to right,
+    rgba(56,189,248,0.08),
+    rgba(56,189,248,0.02)
+  );
+  box-shadow: 0 0 20px rgba(56,189,248,0.15);
+}
+
+header h1 {
+  margin: 0;
+  color: var(--neon-blue);
+  letter-spacing: 1px;
+  text-shadow: 0 0 12px rgba(56,189,248,0.6);
+}
+
+header p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: grid;
+  gap: 24px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid rgba(56,189,248,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px var(--border-glow);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #e0f2fe;
+}
+
+.status {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 14px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.status.hujan {
+  color: var(--neon-red);
+  animation: pulseRed 1.8s infinite;
+}
+
+.status.tidak-hujan {
+  color: var(--neon-green);
+}
+
+.status.jemuran {
+  color: var(--neon-blue);
+}
+
+#lastUpdate {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: #64748b;
+  border-top: 1px solid rgba(56,189,248,0.2);
+  margin-top: 40px;
+}
+
+@keyframes pulseRed {
+  0% { text-shadow: 0 0 8px rgba(244,63,94,0.4); }
+  50% { text-shadow: 0 0 18px rgba(244,63,94,0.9); }
+  100% { text-shadow: 0 0 8px rgba(244,63,94,0.4); }
+}

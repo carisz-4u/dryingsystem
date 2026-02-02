@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring Jemuran Otomatis</title>
+  <link rel="stylesheet" href="utama.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>Sistem Monitoring Jemuran Otomatis</h1>
+    <p>IoT Rain Detection • Realtime Status</p>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Status Cuaca</h2>
+      <div id="statusHujan" class="status">Memuat data...</div>
+    </div>
+
+    <div class="card">
+      <h2>Status Jemuran</h2>
+      <div id="statusJemuran" class="status jemuran">Memuat data...</div>
+    </div>
+
+    <div class="card">
+      <h2>Informasi Terakhir</h2>
+      <p id="lastUpdate">-</p>
+    </div>
+
+  </div>
+
+  <footer>
+    &copy; 2026 • Monitoring Jemuran Otomatis
+  </footer>
+
+<script>
+  function updateStatus(data) {
+    const statusHujan = document.getElementById('statusHujan');
+    const statusJemuran = document.getElementById('statusJemuran');
+    const lastUpdate = document.getElementById('lastUpdate');
+
+    if (data.hujan == 1) {
+      statusHujan.textContent = 'HUJAN TERDETEKSI';
+      statusHujan.className = 'status hujan';
+      statusJemuran.textContent = 'JEMURAN DITEDUHKAN';
+      document.body.classList.add('rain-on');
+    } else {
+      statusHujan.textContent = 'TIDAK HUJAN';
+      statusHujan.className = 'status tidak-hujan';
+      statusJemuran.textContent = 'POSISI TERAKHIR DIPERTAHANKAN';
+      document.body.classList.remove('rain-on');
+    }
+
+    lastUpdate.textContent = new Date().toLocaleString();
+
+  }
+
+  function ambilData() {
+  fetch("http://10.74.84.141/")
+    .then(res => res.json())
+    .then(data => {
+      updateStatus({ hujan: data.hujan });
+    })
+    .catch(() => {
+      document.getElementById('lastUpdate').textContent = 'No data';
+    });
+}
+
+setInterval(ambilData, 1000);
+
+
+</script>
+
+
+</body>
+</html>
