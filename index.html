@@ -60,7 +60,7 @@
   }
 
   function ambilData() {
-  fetch("http://192.168.1.14/")
+  fetch("http://10.239.241.141")
     .then(res => res.json())
     .then(data => {
       updateStatus({ hujan: data.hujan });
@@ -78,4 +78,5 @@ setInterval(ambilData, 1000);
 
 </body>
 </html>
+
 
