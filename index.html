@@ -2,85 +2,77 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Monitoring Jemuran Otomatis</title>
   <link rel="stylesheet" href="utama.css">
 </head>
 
 <body>
 
-  <header>
-    <h1>Sistem Monitoring Jemuran Otomatis</h1>
-    <p>IoT Rain Detection • Realtime Status</p>
-  </header>
+<header>
+  <h1>Sistem Monitoring Jemuran Otomatis</h1>
+  <p>IoT Rain Detection • Realtime Status</p>
+</header>
 
-  <div class="container">
+<div class="container">
 
-    <div class="card">
-      <h2>Status Cuaca</h2>
-      <div id="statusHujan" class="status">Memuat data...</div>
-    </div>
-
-    <div class="card">
-      <h2>Status Jemuran</h2>
-      <div id="statusJemuran" class="status jemuran">Memuat data...</div>
-    </div>
-
-    <div class="card">
-      <h2>Informasi Terakhir</h2>
-      <p id="lastUpdate">-</p>
-    </div>
-
+  <div class="card">
+    <h2>Status Cuaca</h2>
+    <div id="statusHujan" class="status">Memuat data...</div>
   </div>
 
-  <footer>
-    &copy; 2026 • Monitoring Jemuran Otomatis
-  </footer>
+  <div class="card">
+    <h2>Status Jemuran</h2>
+    <div id="statusJemuran" class="status jemuran">Memuat data...</div>
+  </div>
+
+  <div class="card">
+    <h2>Informasi Terakhir</h2>
+    <p id="lastUpdate">-</p>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 • Monitoring Jemuran Otomatis
+</footer>
 
 <script>
-  function updateStatus(data) {
-    const statusHujan = document.getElementById('statusHujan');
-    const statusJemuran = document.getElementById('statusJemuran');
-    const lastUpdate = document.getElementById('lastUpdate');
+function updateStatus(data) {
+  const statusHujan = document.getElementById('statusHujan');
+  const statusJemuran = document.getElementById('statusJemuran');
+  const lastUpdate = document.getElementById('lastUpdate');
 
-    if (data.hujan == 1) {
-      statusHujan.textContent = 'HUJAN TERDETEKSI';
-      statusHujan.className = 'status hujan';
-      statusJemuran.textContent = 'JEMURAN DITEDUHKAN';
-      document.body.classList.add('rain-on');
-    } else {
-      statusHujan.textContent = 'TIDAK HUJAN';
-      statusHujan.className = 'status tidak-hujan';
-      statusJemuran.textContent = 'POSISI TERAKHIR DIPERTAHANKAN';
-      document.body.classList.remove('rain-on');
-    }
-
-    lastUpdate.textContent = new Date().toLocaleString();
-
+  if (data.hujan) {
+    statusHujan.textContent = 'HUJAN TERDETEKSI';
+    statusHujan.className = 'status hujan';
+    statusJemuran.textContent = 'JEMURAN DITEDUHKAN';
+    document.body.classList.add('rain-on');
+  } else {
+    statusHujan.textContent = 'TIDAK HUJAN';
+    statusHujan.className = 'status tidak-hujan';
+    statusJemuran.textContent = 'POSISI TERAKHIR DIPERTAHANKAN';
+    document.body.classList.remove('rain-on');
   }
 
-  function ambilData() {
-  const ESP_IP = "http://192.168.1.228/";
+  lastUpdate.textContent = new Date().toLocaleString();
+}
 
-  fetch(ESP_IP)
+function ambilData() {
+  fetch("http://192.168.1.228/")
     .then(res => res.json())
     .then(data => {
       updateStatus({
-        hujan: data.status === "hujan"
+        hujan: data.hujan
       });
-    }) // ← INI YANG TADI KURANG
+    })
     .catch(() => {
       document.getElementById('lastUpdate').textContent = 'No data';
     });
 }
 
 setInterval(ambilData, 1000);
-
-
 </script>
-
 
 </body>
 </html>
-
-
