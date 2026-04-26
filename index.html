@@ -38,6 +38,7 @@
 </footer>
 
 <script>
+
 function updateStatus(data) {
   const statusHujan = document.getElementById('statusHujan');
   const statusJemuran = document.getElementById('statusJemuran');
@@ -59,7 +60,11 @@ function updateStatus(data) {
 }
 
 function ambilData() {
-  fetch("http://192.168.1.228/")
+
+  // 🔥 GANTI IP DI SINI SAJA (KALAU BERUBAH)
+  const ESP_IP = "http://192.168.1.228/";
+
+  fetch(ESP_IP)
     .then(res => res.json())
     .then(data => {
       updateStatus({
@@ -67,11 +72,14 @@ function ambilData() {
       });
     })
     .catch(() => {
+      document.getElementById('statusHujan').textContent = 'Tidak terhubung';
       document.getElementById('lastUpdate').textContent = 'No data';
     });
 }
 
+// ambil tiap 1 detik
 setInterval(ambilData, 1000);
+
 </script>
 
 </body>
