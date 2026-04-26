@@ -1,3 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monitoring Jemuran Otomatis</title>
+  <link rel="stylesheet" href="utama.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Sistem Monitoring Jemuran Otomatis</h1>
+  <p>IoT Rain Detection • Realtime Status</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Status Cuaca</h2>
+    <div id="statusHujan" class="status">Memuat data...</div>
+  </div>
+
+  <div class="card">
+    <h2>Status Jemuran</h2>
+    <div id="statusJemuran" class="status jemuran">Memuat data...</div>
+  </div>
+
+  <div class="card">
+    <h2>Informasi Terakhir</h2>
+    <p id="lastUpdate">-</p>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 • Monitoring Jemuran Otomatis
+</footer>
+
 <script>
 
 function updateStatus(data) {
@@ -22,7 +61,8 @@ function updateStatus(data) {
 
 function ambilData() {
 
-  const ESP_IP = "http://192.168.1.228/"; // ganti sesuai IP dari Thonny
+  // ⚠️ GANTI SESUAI IP YANG MUNCUL DI THONNY
+  const ESP_IP = "http://192.168.1.228/";
 
   fetch(ESP_IP)
     .then(res => {
@@ -30,9 +70,8 @@ function ambilData() {
       return res.json();
     })
     .then(data => {
-      console.log("DATA:", data); // debug biar keliatan
+      console.log("DATA:", data);
 
-      // pastikan format sesuai ESP
       if (typeof data.hujan !== "undefined") {
         updateStatus({
           hujan: data.hujan
@@ -50,6 +89,10 @@ function ambilData() {
     });
 }
 
+// ambil data tiap 1 detik
 setInterval(ambilData, 1000);
 
 </script>
+
+</body>
+</html>
