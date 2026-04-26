@@ -65,9 +65,10 @@
   fetch(ESP_IP)
     .then(res => res.json())
     .then(data => {
-     updateStatus({
-  hujan: data.status === "hujan"
-});
+      updateStatus({
+        hujan: data.status === "hujan"
+      });
+    }) // ← INI YANG TADI KURANG
     .catch(() => {
       document.getElementById('lastUpdate').textContent = 'No data';
     });
