@@ -1,42 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Monitoring Jemuran Otomatis</title>
-  <link rel="stylesheet" href="utama.css">
-</head>
-
-<body>
-
-<header>
-  <h1>Sistem Monitoring Jemuran Otomatis</h1>
-  <p>IoT Rain Detection • Realtime Status</p>
-</header>
-
-<div class="container">
-
-  <div class="card">
-    <h2>Status Cuaca</h2>
-    <div id="statusHujan" class="status">Memuat data...</div>
-  </div>
-
-  <div class="card">
-    <h2>Status Jemuran</h2>
-    <div id="statusJemuran" class="status jemuran">Memuat data...</div>
-  </div>
-
-  <div class="card">
-    <h2>Informasi Terakhir</h2>
-    <p id="lastUpdate">-</p>
-  </div>
-
-</div>
-
-<footer>
-  &copy; 2026 • Monitoring Jemuran Otomatis
-</footer>
-
 <script>
 
 function updateStatus(data) {
@@ -44,7 +5,7 @@ function updateStatus(data) {
   const statusJemuran = document.getElementById('statusJemuran');
   const lastUpdate = document.getElementById('lastUpdate');
 
-  if (data.hujan) {
+  if (data.hujan === true) {
     statusHujan.textContent = 'HUJAN TERDETEKSI';
     statusHujan.className = 'status hujan';
     statusJemuran.textContent = 'JEMURAN DITEDUHKAN';
@@ -61,26 +22,34 @@ function updateStatus(data) {
 
 function ambilData() {
 
-  // 🔥 GANTI IP DI SINI SAJA (KALAU BERUBAH)
-  const ESP_IP = "http://192.168.1.228/";
+  const ESP_IP = "http://192.168.1.228/"; // ganti sesuai IP dari Thonny
 
   fetch(ESP_IP)
-    .then(res => res.json())
-    .then(data => {
-      updateStatus({
-        hujan: data.hujan
-      });
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP error");
+      return res.json();
     })
-    .catch(() => {
+    .then(data => {
+      console.log("DATA:", data); // debug biar keliatan
+
+      // pastikan format sesuai ESP
+      if (typeof data.hujan !== "undefined") {
+        updateStatus({
+          hujan: data.hujan
+        });
+      } else {
+        throw new Error("Format JSON salah");
+      }
+    })
+    .catch(err => {
+      console.log("ERROR:", err);
+
       document.getElementById('statusHujan').textContent = 'Tidak terhubung';
+      document.getElementById('statusJemuran').textContent = '-';
       document.getElementById('lastUpdate').textContent = 'No data';
     });
 }
 
-// ambil tiap 1 detik
 setInterval(ambilData, 1000);
 
 </script>
-
-</body>
-</html>
